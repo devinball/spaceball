@@ -1,0 +1,29 @@
+{
+  "session": {
+    "sessionId": "SessionId.xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    "application": {
+      "applicationId": "amzn1.ask.skill.1234"
+    },
+    "attributes": {},
+    "user": {
+      "userId": "amzn1.account.XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    },
+    "new": true
+  },
+  "request": {
+    "type": "IntentRequest",
+    "requestId": "EdwRequestId.xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    "locale": "en-US",
+    "timestamp": "2017-06-04T22:18:43Z",
+    "intent": {
+      "name": "SpaceBall",
+      "slots": {
+        "Date": {
+          "name": "Date",
+          "value": "2017-06-04"
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

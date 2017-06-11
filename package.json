@@ -1,0 +1,17 @@
+{
+  "name": "spaceball",
+  "version": "1.0.0",
+  "description": "Amazon Echo Skill to watch for near earth objects.",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:devinball/spaceball.git"
+  },
+  "scripts": {
+    "release": "serverless deploy -s production",
+    "release_def": "serverless deploy",
+    "test": "serverless invoke -f spaceBall -p ./alexa_intent_request.json"
+  },
+  "author": "devinball, jbasdf",
+  "license": "MIT",
+  "homepage": "https://github.com/devinball/spaceball"
+}

@@ -1,0 +1,16 @@
+service: spaceball
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  profile: justin
+
+functions:
+  spaceBall:
+    handler: handler.spaceBall
+    events:
+      - alexaSkill
+
+package:
+  exclude:
+    - node_modules/**
