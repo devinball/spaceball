@@ -3,14 +3,27 @@ service: spaceball
 provider:
   name: aws
   runtime: nodejs6.10
-  profile: justin
+  environment:
+    APPLICATION_ID: "${self:custom.secrets.applicationId}"
+
+plugins:
+  - serverless-webpack
+
+region: us-east-1
 
 functions:
-  spaceBall:
-    handler: handler.spaceBall
+  spaceball:
+    handler: spaceball.handler
     events:
       - alexaSkill
 
 package:
   exclude:
     - node_modules/**
+    - secrets.yml
+
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  secrets: ${file(secrets.yml):${self:custom.stage}}
+

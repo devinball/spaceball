@@ -7,11 +7,26 @@
     "url": "git@github.com:devinball/spaceball.git"
   },
   "scripts": {
-    "release": "serverless deploy -s production",
-    "release_def": "serverless deploy",
-    "test": "serverless invoke -f spaceBall -p ./alexa_intent_request.json"
+    "deploy": "serverless deploy -s production",
+    "dev": "serverless deploy",
+    "test": "serverless webpack invoke -f spaceball -p ./alexa_intent_request.json"
   },
   "author": "devinball, jbasdf",
   "license": "MIT",
-  "homepage": "https://github.com/devinball/spaceball"
+  "homepage": "https://github.com/devinball/spaceball",
+  "dependencies": {
+    "aws-sdk": "^2.6.9",
+    "dotenv": "^4.0.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.17.0",
+    "babel-loader": "^6.2.5",
+    "babel-plugin-transform-class-properties": "^6.16.0",
+    "babel-plugin-transform-runtime": "^6.15.0",
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "json-loader": "^0.5.4",
+    "serverless-webpack": "^1.0.0-rc.2",
+    "webpack": "^1.13.3"
+  }
 }
