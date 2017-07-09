@@ -105,7 +105,7 @@ module.exports.handler = function(event, context, callback) {
 
     // Verify application id
     console.log(`session : ${event.session.application.applicationId}`);
-    console.log(`proces : ${process.env.APPLICATION_ID}`);
+    console.log(`process : ${process.env.APPLICATION_ID}`);
     if(event.session.application.applicationId !== process.env.APPLICATION_ID) {
       return callback('Invalid Application ID');
     }
