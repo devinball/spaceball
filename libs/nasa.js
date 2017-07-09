@@ -7,7 +7,7 @@ function getRandomInt(min, max) {
 function getNEO(startDate, endDate, callback) {
   return https.get({
     host: 'api.nasa.gov',
-    path: '/neo/rest/v1/feed?start_date=' + startDate + '&end_date=' + endDate + '&api_key=' + process.env.NASA_API_KEY
+    path: `/neo/rest/v1/feed?start_date=${startDate}&end_date=${endDate}&api_key=${process.env.NASA_API_KEY}`
   }, (response) => {
     // Continuously update stream with data
     var body = '';
@@ -15,7 +15,6 @@ function getNEO(startDate, endDate, callback) {
       body += d;
     });
     response.on('end', () => {
-      console.log(body);
       callback(JSON.parse(body));
     });
   });
@@ -23,7 +22,15 @@ function getNEO(startDate, endDate, callback) {
 
 // Contact Nasa.
 export function checkNEOs(rawDate, callback) {
-  const date = new Date(rawDate).toISOString().split('T')[0];
+  let date;
+  if (rawDate) {
+    date = new Date(rawDate);
+  } else {
+    date = new Date();
+  }
+
+  date = date.toISOString().split('T')[0];
+
   let speechOutput = '';
 
   const responses = [
@@ -39,16 +46,15 @@ export function checkNEOs(rawDate, callback) {
 
     speechOutput = `Dear me, there are ${results.element_count} objects near the earth. `;
 
-    for(var neo in results.near_earth_objects) {
-      var neos = results.near_earth_objects[neo];
+    for(let neo in results.near_earth_objects) {
+      const neos = results.near_earth_objects[neo];
       for(var i = 0; i < neos.length; i++) {
-        var astroid = neos[i];
+        const astroid = neos[i];
         speechOutput = speechOutput +
           astroid.name +
-          " is between " + Math.round(astroid.estimated_diameter.meters.estimated_diameter_min) +
-          " and " + Math.round(astroid.estimated_diameter.meters.estimated_diameter_max) + " meters in size" +
-          " moving at " + Math.round(astroid.close_approach_data[0].relative_velocity.kilometers_per_hour) + " kilometers per hour" +
-          " and will miss the earth by " + Math.round(astroid.close_approach_data[0].miss_distance.kilometers) + " kilometers.";
+          " is about " + Math.round(astroid.estimated_diameter.meters.estimated_diameter_max) + " meters in size," +
+          " moving at " + Math.round((astroid.close_approach_data[0].relative_velocity.kilometers_per_hour/10000)*10000) + " kilometers per hour" +
+          " and will miss the earth by " + Math.round(astroid.close_approach_data[0].miss_distance.kilometers/1000000) + " million kilometers.";
         if(astroid.is_potentially_hazardous_asteroid) {
           speechOutput = speechOutput + " It could kill us. Run for the hills. You're all going to die! "
         } else {

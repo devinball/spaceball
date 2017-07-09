@@ -34,7 +34,7 @@ function getWelcomeResponse(callback) {
   // If we wanted to initialize the session to have some attributes we could add those here.
   const sessionAttributes = {};
   const cardTitle = 'Welcome to Space Ball';
-  const speechOutput = 'Welcome to Space Ball. Find out if you are in danger from near earth objects by asking, Space Ball, am I in danger?';
+  const speechOutput = 'Welcome to Space Ball. Find out if you are in danger from near earth objects by asking, Space Ball are there astroids close by or, Space Ball, are we all going to die today?';
   // If the user either does not reply to the welcome message or says something that is not
   // understood, they will be prompted again with this text.
   const repromptText = 'You can also ask me, Space Ball are we all going to die.';
@@ -48,8 +48,8 @@ function getWelcomeResponse(callback) {
 function getHelpResponse(callback) {
   const sessionAttributes = {};
   const cardTitle = 'Help';
-  const speechOutput = 'SpaceBall finds objects near the earth for a given day. You can ask.';
-  const repromptText = '';
+  const speechOutput = 'SpaceBall finds objects near the earth for a given day. You can ask, Space Ball list near earth objects for July 4th, 2017 or Space Ball what\'s out there';
+  const repromptText = 'You can also ask Space Ball, Space Ball are we all going to die? and Space Ball what\s up?';
   const shouldEndSession = false;
   callback(sessionAttributes,
     buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
@@ -61,7 +61,15 @@ function onIntent(intentRequest, session, callback) {
   const intentName = intentRequest.intent.name;
 
   // Dispatch to your skill's intent handlers
-  if('SpaceBall' === intentName) {
+  if('AMAZON.HelpIntent' === intentName) {
+    getHelpResponse(callback);
+  } else if('AMAZON.StopIntent' === intentName ||
+    'AMAZON.CancelIntent' === intentName) {
+    const cardTitle = intent.name;
+    const sessionAttributes = {};
+    callback(sessionAttributes,
+        buildSpeechletResponse(cardTitle, '', '', true));
+  } else if('SpaceBall' === intentName) {
     checkNEOs(intent.slots.Date.value, (speechOutput) => {
       const cardTitle = intent.name;
       const sessionAttributes = {};
@@ -70,8 +78,6 @@ function onIntent(intentRequest, session, callback) {
       callback(sessionAttributes,
         buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
     });
-  } else if('AMAZON.HelpIntent' === intentName) {
-    getHelpResponse(callback);
   } else {
     throw 'Invalid intent';
   }
@@ -98,6 +104,8 @@ module.exports.handler = function(event, context, callback) {
   try {
 
     // Verify application id
+    console.log(`session : ${event.session.application.applicationId}`);
+    console.log(`proces : ${process.env.APPLICATION_ID}`);
     if(event.session.application.applicationId !== process.env.APPLICATION_ID) {
       return callback('Invalid Application ID');
     }
