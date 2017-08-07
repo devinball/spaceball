@@ -1,5 +1,6 @@
 import https from 'https';
 import { getSpeech } from './speech';
+import { getDateFromSlot } from './dates';
 
 function getNEO(startDate, endDate, callback) {
   return https.get({
@@ -19,18 +20,13 @@ function getNEO(startDate, endDate, callback) {
 
 // Contact Nasa.
 export function checkNEOs(rawDate, callback) {
-  let date;
-  if (rawDate) {
-    date = new Date(rawDate);
-  } else {
-    date = new Date();
-  }
+  const date = getDateFromSlot(rawDate);
 
-  date = date.toISOString().split('T')[0];
-
-  getNEO(date, date, (results) => {
+  getNEO(
+    date.startDate.toISOString().split('T')[0],
+    date.endDate.toISOString().split('T')[0],
+    (results) => {
     callback(getSpeech(results));
   });
 
 }
-
